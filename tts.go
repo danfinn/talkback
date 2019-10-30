@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -20,6 +21,22 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+//Needed to parse JSON output of getRandomChuckNorris()
+type jokeValue struct {
+	Value string `json:"value"`
+}
+
+func getRandomChuckNorris () string {
+	//Get a random Chuck Norris quote from api.chucknorris.io
+	response, httpErr := http.Get("https://api.chucknorris.io/jokes/random")
+	check(httpErr)
+	data := json.NewDecoder(response.Body)
+	var jsonResponse jokeValue
+	jsonErr := data.Decode(&jsonResponse)
+	check(jsonErr)
+	return jsonResponse.Value
 }
 
 func buildURL(t string) string {
@@ -63,7 +80,7 @@ func main() {
 	if len(os.Args) > 1 {
 		text_input = os.Args[len(os.Args)-1]
 	} else {
-		text_input = "Hello, how are you?"
+		text_input = getRandomChuckNorris()
 	}
 	file_input := *readFromFile
 
