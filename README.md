@@ -1,5 +1,8 @@
-A CLI tool to convert text to audio.  It can take text from the CLI or you can point it at a file to read in from.
-This uses the public API provided by http://www.voicerss.org for the text to audio conversion.
+# talkback
+
+A CLI tool to convert text to audio.  You can provide quoted text on the command line or point to a file for it to read in from.
+
+## Running talkback
 
 ```
 ./talkback 
@@ -9,3 +12,6 @@ This uses the public API provided by http://www.voicerss.org for the text to aud
 
 ./talkback -f /path/to/file.txt
 ```
+## Built With
+[VoiceRSS](http://www.voicerss.org/default.aspx) - Public API to convert text to an audio file
+[ChuckNorris.io](https://api.chucknorris.io/) - Random Chuck Norris jokes and facts
