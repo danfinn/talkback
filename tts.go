@@ -4,11 +4,17 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
-	"syscall"
+	"os/exec"
+	"runtime"
 )
+
+//Default Audio Applications by Platform
+var LINUXAUDIO = "aplay"
+var MACAUDIO = "afplay"
 
 func check(e error) {
 	if e != nil {
@@ -31,12 +37,19 @@ func write_and_play(data []byte) {
 	output_file := "/tmp/sound.wav"
 	writeErr := ioutil.WriteFile(output_file, data, 0644)
 	check(writeErr)
-	env := os.Environ()
-	//Need to implement OS checking so that this works on linux
-	execErr := syscall.Exec("/usr/bin/afplay", []string{"afplay", output_file}, env)
-	check(execErr)
-	//This isn't working, not sure why
-	fmt.Println("deleting file?")
+	//set audiocommand by operating system
+	var audiocommand string
+	platform := runtime.GOOS
+	if platform == "linux" {
+		audiocommand = LINUXAUDIO
+	} else if platform == "darwin" {
+		audiocommand = MACAUDIO
+	} else {
+		log.Fatal("operating system not supported")
+	}
+	cmd := exec.Command(audiocommand, output_file)
+	err := cmd.Run()
+	check(err)
 	rmErr := os.Remove(output_file)
 	check(rmErr)
 }
