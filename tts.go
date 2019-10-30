@@ -54,7 +54,7 @@ func main() {
 	if file_input != "" {
 		if _, err := os.Stat(file_input); err == nil {
 			//Should probably make sure the file is a text file or
-			//that the input is text before tring to convert it
+			//that the input is text before trying to convert it
 			f, fileErr := ioutil.ReadFile(file_input)
 			check(fileErr)
 			response, httpErr := http.Get(buildURL(string(f)))
