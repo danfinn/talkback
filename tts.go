@@ -50,6 +50,7 @@ func main() {
 	text_input := *readFromCLI
 	file_input := *readFromFile
 
+	//I'm not sure how but I feel like this could be cleaned up
 	if file_input != "" {
 		if _, err := os.Stat(file_input); err == nil {
 			f, fileErr := ioutil.ReadFile(file_input)
