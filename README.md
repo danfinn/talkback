@@ -1,6 +1,6 @@
 # talkback
 
-A CLI tool to convert text to audio.  You can provide quoted text on the command line or point to a file for it to read in from.
+A CLI tool to convert text to audio.  You can provide quoted text on the command line or point to a file for it to read from.
 
 ### Running talkback
 
