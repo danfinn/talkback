@@ -32,8 +32,10 @@ func write_and_play(data []byte) {
 	writeErr := ioutil.WriteFile(output_file, data, 0644)
 	check(writeErr)
 	env := os.Environ()
+	//Need to implement OS checking so that this works on linux
 	execErr := syscall.Exec("/usr/bin/afplay", []string{"afplay", output_file}, env)
 	check(execErr)
+	//This isn't working, not sure why
 	fmt.Println("deleting file?")
 	rmErr := os.Remove(output_file)
 	check(rmErr)
