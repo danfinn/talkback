@@ -57,10 +57,14 @@ func write_and_play(data []byte) {
 func main() {
 
 	//Get user flags
-	readFromCLI := flag.String("c", "Hello, how are you?", "text to read, must be in quotes")
 	readFromFile := flag.String("f", "", "file to read from")
 	flag.Parse()
-	text_input := *readFromCLI
+	var text_input string
+	if len(os.Args) > 1 {
+		text_input = os.Args[len(os.Args)-1]
+	} else {
+		text_input = "Hello, how are you?"
+	}
 	file_input := *readFromFile
 
 	//I'm not sure how but I feel like this could be cleaned up
