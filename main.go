@@ -13,10 +13,6 @@ import (
 	"runtime"
 )
 
-//Default Audio Applications by Platform
-var LINUXAUDIO = "aplay"
-var MACAUDIO = "afplay"
-
 func check(e error) {
 	if e != nil {
 		panic(e)
@@ -51,17 +47,17 @@ func buildURL(t string) string {
 }
 
 func write_and_play(data []byte) {
-	output_file := "/tmp/sound.wav"
+	output_file := "/tmp/talkback_output.wav"
 	writeErr := ioutil.WriteFile(output_file, data, 0644)
 	check(writeErr)
 	//set audiocommand by operating system
 	var audiocommand string
-	platform := runtime.GOOS
-	if platform == "linux" {
-		audiocommand = LINUXAUDIO
-	} else if platform == "darwin" {
-		audiocommand = MACAUDIO
-	} else {
+	switch platform := runtime.GOOS; platform {
+	case "linux":
+		audiocommand = "aplay"
+	case "darwin":
+		audiocommand = "afplay"
+	default:
 		log.Fatal("operating system not supported")
 	}
 	cmd := exec.Command(audiocommand, output_file)
@@ -84,11 +80,8 @@ func main() {
 	}
 	file_input := *readFromFile
 
-	//I'm not sure how but I feel like this could be cleaned up
 	if file_input != "" {
 		if _, err := os.Stat(file_input); err == nil {
-			//Should probably make sure the file is a text file or
-			//that the input is text before trying to convert it
 			f, fileErr := ioutil.ReadFile(file_input)
 			check(fileErr)
 			response, httpErr := http.Get(buildURL(string(f)))
