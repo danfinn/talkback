@@ -70,7 +70,7 @@ func write_and_play(data []byte) {
 func main() {
 
 	//Get user flags
-	readFromFile := flag.String("f", "", "file to read from")
+	readFromFile := flag.String("f", "", "path to text file")
 	flag.Parse()
 	var text_input string
 	if len(os.Args) > 1 {
