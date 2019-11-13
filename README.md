@@ -6,8 +6,7 @@ A CLI tool to convert text to audio.  You can provide quoted text on the command
 
 ![say what????](http://giphygifs.s3.amazonaws.com/media/91fEJqgdsnu4E/giphy.gif)
 
-### Running talkback
-
+### Usage
 ```
 ./talkback 
 ^ running with no options will output a random Chuck Norris joke
