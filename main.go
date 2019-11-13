@@ -46,10 +46,16 @@ func buildURL(t string) string {
 	return baseUrl.String()
 }
 
-func write_and_play(data []byte) {
-	output_file := "/tmp/talkback_output.wav"
-	writeErr := ioutil.WriteFile(output_file, data, 0644)
+func cleanUp(f string) {
+	rmErr := os.Remove(f)
+        check(rmErr)
+}
+
+func writeAndPlay(data []byte) {
+	outputFile := "/tmp/talkback_output.wav"
+	writeErr := ioutil.WriteFile(outputFile, data, 0644)
 	check(writeErr)
+	defer cleanUp(outputFile)
 	//set audiocommand by operating system
 	var audiocommand string
 	switch platform := runtime.GOOS; platform {
@@ -60,11 +66,9 @@ func write_and_play(data []byte) {
 	default:
 		log.Fatal("operating system not supported")
 	}
-	cmd := exec.Command(audiocommand, output_file)
+	cmd := exec.Command(audiocommand, outputFile)
 	err := cmd.Run()
 	check(err)
-	rmErr := os.Remove(output_file)
-	check(rmErr)
 }
 
 func main() {
@@ -72,30 +76,30 @@ func main() {
 	//Get user flags
 	readFromFile := flag.String("f", "", "path to text file")
 	flag.Parse()
-	var text_input string
+	var textInput string
 	if len(os.Args) > 1 {
-		text_input = os.Args[len(os.Args)-1]
+		textInput = os.Args[len(os.Args)-1]
 	} else {
-		text_input = getRandomChuckNorris()
+		textInput = getRandomChuckNorris()
 	}
-	file_input := *readFromFile
+	fileInput := *readFromFile
 
-	if file_input != "" {
-		if _, err := os.Stat(file_input); err == nil {
-			f, fileErr := ioutil.ReadFile(file_input)
+	if fileInput != "" {
+		if _, err := os.Stat(fileInput); err == nil {
+			f, fileErr := ioutil.ReadFile(fileInput)
 			check(fileErr)
 			response, httpErr := http.Get(buildURL(string(f)))
 			check(httpErr)
 			data, _ := ioutil.ReadAll(response.Body)
-			write_and_play(data)
+			writeAndPlay(data)
 		} else {
 			fmt.Println(err)
 		}
 	} else {
-		response, httpErr := http.Get(buildURL(text_input))
+		response, httpErr := http.Get(buildURL(textInput))
 		check(httpErr)
 		data, _ := ioutil.ReadAll(response.Body)
-		write_and_play(data)
+		writeAndPlay(data)
 	}
 
 }
