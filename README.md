@@ -2,8 +2,11 @@
 
 A CLI tool to convert text to audio.  You can provide quoted text on the command line or point to a file for it to read from.
 
-### Running talkback
 
+
+![say what????](http://giphygifs.s3.amazonaws.com/media/91fEJqgdsnu4E/giphy.gif)
+
+### Usage
 ```
 ./talkback 
 ^ running with no options will output a random Chuck Norris joke
