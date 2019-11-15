@@ -28,9 +28,11 @@ func getRandomChuckNorris () string {
 	//Get a random Chuck Norris quote from api.chucknorris.io
 	response, httpErr := http.Get("https://api.chucknorris.io/jokes/random")
 	check(httpErr)
-	data := json.NewDecoder(response.Body)
+	defer response.Body.Close()
+	data, responseErr := ioutil.ReadAll(response.Body)
+	check(responseErr)
 	var jsonResponse jokeValue
-	jsonErr := data.Decode(&jsonResponse)
+	jsonErr := json.Unmarshal(data, &jsonResponse)
 	check(jsonErr)
 	return jsonResponse.Value
 }
