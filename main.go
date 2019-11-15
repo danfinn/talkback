@@ -91,6 +91,7 @@ func main() {
 			f, fileErr := ioutil.ReadFile(fileInput)
 			check(fileErr)
 			response, httpErr := http.Get(buildURL(string(f)))
+			defer response.Body.Close()
 			check(httpErr)
 			data, _ := ioutil.ReadAll(response.Body)
 			writeAndPlay(data)
@@ -99,6 +100,7 @@ func main() {
 		}
 	} else {
 		response, httpErr := http.Get(buildURL(textInput))
+		defer response.Body.Close()
 		check(httpErr)
 		data, _ := ioutil.ReadAll(response.Body)
 		writeAndPlay(data)
